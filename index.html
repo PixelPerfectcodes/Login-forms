@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Nexus | Login</title>
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --secondary: #ff00e4;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #e0e0ff;
+            --error: #ff3860;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', 'Arial', sans-serif;
+        }
+
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(0, 247, 255, 0.1) 0%,
+                rgba(255, 0, 228, 0.1) 100%
+            );
+            z-index: -1;
+        }
+
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 247, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 247, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        .login-container {
+            width: 400px;
+            background: rgba(10, 10, 26, 0.8);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: glow 3s infinite alternate;
+        }
+
+        .welcome-container {
+            display: none;
+            width: 400px;
+            background: rgba(10, 10, 26, 0.8);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: glow 3s infinite alternate;
+            text-align: center;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(255, 0, 228, 0.3);
+            }
+        }
+
+        .login-container::before, .welcome-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 0%,
+                transparent 50%,
+                var(--primary) 50%,
+                var(--secondary) 100%
+            );
+            transform: rotate(30deg);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            font-size: 0.9rem;
+            color: var(--light);
+            opacity: 0.7;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .welcome-message h2 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            padding: 12px 25px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: var(--darker);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.4);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--light);
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(20, 20, 40, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(224, 224, 255, 0.5);
+        }
+
+        .input-group .icon {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--primary);
+            opacity: 0.7;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            accent-color: var(--primary);
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+            color: var(--secondary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: var(--darker);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.4);
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.5s ease;
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .signup-link {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+            color: var(--secondary);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(0, 247, 255, 0.3),
+                transparent
+            );
+            animation: scan 8s linear infinite;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        @keyframes scan {
+            0% {
+                top: -10px;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        .social-login {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .social-login p {
+            position: relative;
+            margin-bottom: 20px;
+            color: rgba(224, 224, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(20, 20, 40, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 247, 255, 0.3);
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .login-container, .welcome-container {
+                width: 90%;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div class="scan-line"></div>
+
+    <div class="login-container" id="loginContainer">
+        <div class="logo">
+            <h1>NEON NEXUS</h1>
+            <p>Access the digital frontier</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">USERNAME</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+                <div class="error-message" id="username-error">Please enter a valid username</div>
+            </div>
+
+            <div class="input-group">
+                <label for="password">PASSWORD</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <div class="error-message" id="password-error">Password must be at least 8 characters</div>
+            </div>
+
+            <div class="options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">LOGIN</button>
+
+            <div class="signup-link">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+
+            <div class="social-login">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="welcome-container" id="welcomeContainer">
+        <div class="logo">
+            <h1>NEON NEXUS</h1>
+        </div>
+        
+        <div class="welcome-message">
+            <h2>ACCESS GRANTED</h2>
+            <p>Hi, <span class="user-name" id="welcomeUsername">User</span></p>
+            <p>Welcome to the digital frontier</p>
+            <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create particles
+            createParticles();
+            
+            // Get DOM elements
+            const loginForm = document.getElementById('loginForm');
+            const loginContainer = document.getElementById('loginContainer');
+            const welcomeContainer = document.getElementById('welcomeContainer');
+            const welcomeUsername = document.getElementById('welcomeUsername');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+            const rememberCheckbox = document.getElementById('remember');
+
+            // Check if user is already logged in (from localStorage)
+            if (localStorage.getItem('loggedIn') === 'true') {
+                const savedUsername = localStorage.getItem('username') || 'User';
+                showWelcomeScreen(savedUsername);
+            }
+
+            // Form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let isValid = true;
+
+                // Validate username
+                if (usernameInput.value.trim() === '') {
+                    usernameError.style.display = 'block';
+                    usernameInput.style.borderColor = 'var(--error)';
+                    isValid = false;
+                } else {
+                    usernameError.style.display = 'none';
+                    usernameInput.style.borderColor = 'rgba(0, 247, 255, 0.3)';
+                }
+
+                // Validate password
+                if (passwordInput.value.length < 8) {
+                    passwordError.style.display = 'block';
+                    passwordInput.style.borderColor = 'var(--error)';
+                    isValid = false;
+                } else {
+                    passwordError.style.display = 'none';
+                    passwordInput.style.borderColor = 'rgba(0, 247, 255, 0.3)';
+                }
+
+                if (isValid) {
+                    // Simulate login process
+                    simulateLogin(usernameInput.value.trim());
+                }
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', function() {
+                // Clear saved data
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('username');
+                
+                // Show login screen
+                loginContainer.style.display = 'block';
+                welcomeContainer.style.display = 'none';
+                
+                // Reset form
+                loginForm.reset();
+            });
+
+            // Input focus effects
+            usernameInput.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary)';
+                this.style.boxShadow = '0 0 10px rgba(0, 247, 255, 0.3)';
+            });
+
+            usernameInput.addEventListener('blur', function() {
+                if (!usernameError.style.display || usernameError.style.display === 'none') {
+                    this.style.borderColor = 'rgba(0, 247, 255, 0.3)';
+                }
+                this.style.boxShadow = 'none';
+            });
+
+            passwordInput.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary)';
+                this.style.boxShadow = '0 0 10px rgba(0, 247, 255, 0.3)';
+            });
+
+            passwordInput.addEventListener('blur', function() {
+                if (!passwordError.style.display || passwordError.style.display === 'none') {
+                    this.style.borderColor = 'rgba(0, 247, 255, 0.3)';
+                }
+                this.style.boxShadow = 'none';
+            });
+
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 20;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Random properties
+                    const size = Math.random() * 5 + 2;
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    const duration = Math.random() * 10 + 10;
+                    const delay = Math.random() * 5;
+                    
+                    // Apply styles
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.animationDuration = `${duration}s`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    // Random color
+                    const colors = ['#00f7ff', '#ff00e4', '#00ff9d', '#ff9100'];
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.background = randomColor;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            // Simulate login process
+            function simulateLogin(username) {
+                const loginBtn = document.querySelector('.login-btn');
+                const originalText = loginBtn.textContent;
+                
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
+                loginBtn.style.opacity = '0.8';
+                loginBtn.disabled = true;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    loginBtn.innerHTML = '<i class="fas fa-check"></i> ACCESS GRANTED';
+                    loginBtn.style.background = 'linear-gradient(90deg, #00ff9d, #00d4ff)';
+                    
+                    // Remember user if checkbox is checked
+                    if (rememberCheckbox.checked) {
+                        localStorage.setItem('loggedIn', 'true');
+                        localStorage.setItem('username', username);
+                    }
+                    
+                    // Show welcome screen after success
+                    setTimeout(() => {
+                        showWelcomeScreen(username);
+                    }, 1000);
+                }, 2000);
+            }
+
+            // Show welcome screen with username
+            function showWelcomeScreen(username) {
+                loginContainer.style.display = 'none';
+                welcomeContainer.style.display = 'block';
+                welcomeUsername.textContent = username;
+            }
+        });
+    </script>
+</body>
+</html>
